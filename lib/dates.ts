@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { isSameDay } from "date-fns";
 import config from "./config";
 
@@ -103,4 +104,20 @@ export const getDatesBetweenDates = (startDate, endDate) => {
     theDate.setDate(theDate.getDate() + 1);
   }
   return dates;
+};
+
+export const getBlockedDates = () => {
+  const blocked = [];
+
+  if (config.blocked) {
+    for (const [yearKey, yearValue] of Object.entries(config.blocked)) {
+      for (const [monthKey, monthValue] of Object.entries(yearValue)) {
+        for (const day of monthValue) {
+          blocked.push(new Date(Number(yearKey), Number(monthKey) - 1, day));
+        }
+      }
+    }
+  }
+
+  return blocked;
 };

@@ -30,3 +30,8 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.rdp-day {
+  height: 50px !important;
+  border-radius: 0 !important;
+}

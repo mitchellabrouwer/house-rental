@@ -1,12 +1,54 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import Link from "next/link";
+import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { isDaySelectable } from "../lib/dates";
+import { getCost } from "../lib/cost";
+import {
+  addDayToRange,
+  getDatesBetweenDates,
+  isDaySelectable,
+} from "../lib/dates";
 
 export default function Calendar() {
+  const [from, setFrom] = useState();
+  const [to, setTo] = useState();
+
+  const handleDayClick = (day) => {
+    const range = addDayToRange(day, { from, to });
+
+    if (!range.to) {
+      if (!isDaySelectable(range.from)) {
+        alert("This date cannot be selected");
+        return;
+      }
+      range.to = range.from;
+    }
+
+    if (range.to && range.from) {
+      if (!isDaySelectable(range.to)) {
+        alert("The in date cannot be selected");
+        return;
+      }
+    }
+
+    const daysInBetween = getDatesBetweenDates(range.from, range.to);
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const dayInBetween of daysInBetween) {
+      if (!isDaySelectable(dayInBetween)) {
+        alert("Sum days between those 2 dates cannot be selected");
+        return;
+      }
+    }
+
+    setFrom(range.from);
+    setTo(range.to);
+  };
+
   return (
     <div>
       <Head>
@@ -47,19 +89,29 @@ export default function Calendar() {
       </div>
       <div className="mt-10 flex flex-col">
         <p className="my-10 text-center text-2xl font-bold">
-          Availability and braces per night
+          Availability and prices per night
         </p>
 
-        <div className="availability-calendar flex justify-center pt-6">
+        <div className="availability-calendar flex w-full justify-center pt-6">
           <DayPicker
+            selected={[from, { from, to }]}
+            mode="range"
+            onDayClick={handleDayClick}
             components={{
-              DayContent: (props) => (
+              DayContent: ({ date }) => (
                 <div
-                  className={`relative text-right ${
-                    !isDaySelectable(props.date) && "text-gray-500"
+                  className={`relative ${
+                    !isDaySelectable(date) && "text-gray-500"
                   }`}
                 >
-                  {props.date.getDate()}
+                  <div>{date.getDate()}</div>
+                  {isDaySelectable(date) && (
+                    <div>
+                      <span className="rounded-md bg-white px-1 font-bold text-black">
+                        ${getCost(date)}
+                      </span>
+                    </div>
+                  )}
                 </div>
               ),
             }}

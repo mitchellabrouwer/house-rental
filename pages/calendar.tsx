@@ -7,15 +7,19 @@ import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { getBookedDates } from "../lib/bookings";
-import { getCost } from "../lib/cost";
+import { getCost, totalCostOfStay } from "../lib/cost";
 import {
   addDayToRange,
   getBlockedDates,
   getDatesBetweenDates,
   isDaySelectable,
+  numberOfNightsBetweenDates,
 } from "../lib/dates";
 
 export default function Calendar() {
+  const [numberOfNights, setNumberOfNights] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+
   const [from, setFrom] = useState();
   const [to, setTo] = useState();
 
@@ -55,6 +59,9 @@ export default function Calendar() {
 
     setFrom(range.from);
     setTo(range.to);
+
+    setNumberOfNights(numberOfNightsBetweenDates(range.from, range.to) + 1);
+    setTotalCost(totalCostOfStay(range.from, range.to));
   };
 
   return (
@@ -96,14 +103,14 @@ export default function Calendar() {
         </div>
       </div>
       <div className="mt-10 flex flex-col">
-        <p className="my-10 text-center text-2xl font-bold">
+        <p className="my-5 text-center text-2xl font-bold">
           Availability and prices per night
         </p>
-
         <div className="availability-calendar flex w-full justify-center pt-6">
           <DayPicker
             selected={[from, { from, to }]}
             mode="range"
+            className="rounded-lg border px-10 py-5"
             onDayClick={handleDayClick}
             disabled={[
               ...getBlockedDates(),
@@ -137,6 +144,28 @@ export default function Calendar() {
             }}
           />
         </div>
+        <p className="mt-2 text-center font-extrabold">
+          {totalCost > 0 && `Total cost: $${totalCost}`}
+        </p>
+        <p className="mt-2 text-center italic">
+          {numberOfNights > 0 && `Stay for ${numberOfNights} nights`}
+        </p>
+        <p className="text-center">
+          {from && to && (
+            <button
+              type="button"
+              className="mt-4 rounded-md border px-2 py-1"
+              onClick={() => {
+                setFrom(null);
+                setTo(null);
+                setNumberOfNights(0);
+                setTotalCost(0);
+              }}
+            >
+              Reset
+            </button>
+          )}
+        </p>
       </div>
     </div>
   );

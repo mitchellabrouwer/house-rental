@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import Link from "next/link";
+import Script from "next/script";
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -13,7 +14,7 @@ import {
   getBlockedDates,
   getDatesBetweenDates,
   isDaySelectable,
-  numberOfNightsBetweenDates,
+  numberOfNightsBetweenDates
 } from "../lib/dates";
 
 export default function Calendar() {
@@ -71,6 +72,7 @@ export default function Calendar() {
         <meta name="description" content="Rental Apartment Website" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Script src="https://js.stripe.com/v3/"></Script>
 
       <div className="relative overflow-hidden">
         <div className="relative">
@@ -166,6 +168,46 @@ export default function Calendar() {
             </button>
           )}
         </p>
+        {numberOfNights > 0 && (
+          <button
+            className="mx-auto mt-5 w-40 rounded-md border border-transparent bg-green-500 px-4 py-3 text-base font-medium text-white shadow-sm  sm:px-8"
+            type="button"
+            onClick={async () => {
+              console.log("click");
+              try {
+                const res = await fetch("/api/stripe/session", {
+                  body: JSON.stringify({
+                    from,
+                    to,
+                  }),
+                  headers: {
+            test@gmail.com        "Content-Type": "application/json",
+                  },
+                  method: "POST",
+                });
+
+                const data = await res.json();
+                const { sessionId } = data;
+                const { stripePublicKey } = data;
+                // update to code required
+                // @ts-ignore
+                // eslint-disable-next-line no-undef
+                const stripe = Stripe(stripePublicKey);
+                const { error } = await stripe.redirectToCheckout({
+                  sessionId,
+                });
+
+                if (error) {
+                  console.log("error", error);
+                }
+              } catch (error) {
+                console.log("error", error);
+              }
+            }}
+          >
+            Book Now
+          </button>
+        )}{" "}
       </div>
     </div>
   );

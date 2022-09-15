@@ -59,3 +59,14 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model Booking {
+  id        String   @id @default(cuid())
+  from      DateTime
+  to        DateTime
+  price     Decimal?
+  email     String? //needed for Stripe
+  sessionId String? //needed for Stripe
+  paid      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

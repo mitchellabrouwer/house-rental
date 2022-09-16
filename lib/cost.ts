@@ -1,4 +1,5 @@
 import config from "./config";
+import { numberOfNightsBetweenDates } from "./dates";
 
 export const isWeekend = (date) =>
   !!(date.getDay() === 5 || date.getDay() === 6);
@@ -46,6 +47,12 @@ export function getCost(date) {
 
 export const totalCostOfStay = (startDate, endDate) => {
   let cost = 0;
+  const nights = numberOfNightsBetweenDates(startDate, endDate);
+
+  const { nights: mediumStayNights, discount: mediumStayDiscount } =
+    config.costs.discounts.medium_stay;
+  const { nights: longStayNights, discount: longStayDiscount } =
+    config.costs.discounts.long_stay;
 
   const theDate = new Date(startDate);
 
@@ -55,6 +62,14 @@ export const totalCostOfStay = (startDate, endDate) => {
     theDate.setDate(theDate.getDate() + 1);
     cost += getCost(theDate);
   }
+
+  if (nights >= longStayNights) {
+    cost -= cost * longStayDiscount;
+  } else if (nights >= mediumStayNights) {
+    cost -= cost * mediumStayDiscount;
+  }
+
+  cost += config.costs.service_fee;
 
   return cost;
 };

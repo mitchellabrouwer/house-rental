@@ -16,10 +16,14 @@ import {
   isDaySelectable,
   numberOfNightsBetweenDates,
 } from "../lib/dates";
+import prisma from "../lib/prisma";
 
-export default function Calendar() {
+export default function Calendar({ bookedDates }) {
   const [numberOfNights, setNumberOfNights] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
+
+  const [guests, setGuests] = useState(0);
+  const [pet, setPet] = useState(false);
 
   const [from, setFrom] = useState();
   const [to, setTo] = useState();
@@ -34,7 +38,7 @@ export default function Calendar() {
     const range = addDayToRange(day, { from, to });
 
     if (!range.to) {
-      if (!isDaySelectable(range.from)) {
+      if (!isDaySelectable(range.from, bookedDates)) {
         alert("This date cannot be selected");
         return;
       }
@@ -42,7 +46,7 @@ export default function Calendar() {
     }
 
     if (range.to && range.from) {
-      if (!isDaySelectable(range.to)) {
+      if (!isDaySelectable(range.to, bookedDates)) {
         alert("The in date cannot be selected");
         return;
       }
@@ -52,7 +56,7 @@ export default function Calendar() {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const dayInBetween of daysInBetween) {
-      if (!isDaySelectable(dayInBetween)) {
+      if (!isDaySelectable(dayInBetween, bookedDates)) {
         alert("Sum days between those 2 dates cannot be selected");
         return;
       }
@@ -63,6 +67,36 @@ export default function Calendar() {
 
     setNumberOfNights(numberOfNightsBetweenDates(range.from, range.to) + 1);
     setTotalCost(totalCostOfStay(range.from, range.to));
+  };
+
+  const handleBookingClick = async () => {
+    const res = await fetch("/api/stripe/session", {
+      body: JSON.stringify({
+        from,
+        to,
+        guests,
+        pet,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    });
+
+    const data = await res.json();
+    const { sessionId } = data;
+    const { stripePublicKey } = data;
+    // update to code required
+    // @ts-ignore
+    // eslint-disable-next-line no-undef
+    const stripe = Stripe(stripePublicKey);
+    const { error } = await stripe.redirectToCheckout({
+      sessionId,
+    });
+
+    if (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -116,7 +150,7 @@ export default function Calendar() {
             onDayClick={handleDayClick}
             disabled={[
               ...getBlockedDates(),
-              ...getBookedDates(),
+              ...bookedDates,
               {
                 from: new Date("0000"),
                 to: yesterday,
@@ -130,11 +164,11 @@ export default function Calendar() {
               DayContent: ({ date }) => (
                 <div
                   className={`relative ${
-                    !isDaySelectable(date) && "text-gray-500"
+                    !isDaySelectable(date, bookedDates) && "text-gray-500"
                   }`}
                 >
                   <div>{date.getDate()}</div>
-                  {isDaySelectable(date) && (
+                  {isDaySelectable(date, bookedDates) && (
                     <div>
                       <span className="rounded-md bg-white px-1 font-bold text-black">
                         ${getCost(date)}
@@ -146,6 +180,7 @@ export default function Calendar() {
             }}
           />
         </div>
+
         <p className="mt-2 text-center font-extrabold">
           {totalCost > 0 && `Total cost: $${totalCost}`}
         </p>
@@ -168,47 +203,56 @@ export default function Calendar() {
             </button>
           )}
         </p>
+        <div className="mt-2 text-center">
+          <label
+            htmlFor="visitors"
+            className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            Number of guests
+            <input
+              type="number"
+              id="visitors"
+              className="ml-4 w-20 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              placeholder=""
+              onChange={() => setGuests(guests + 1)}
+              required
+            />
+          </label>
+          <label
+            htmlFor="pet-checkbox"
+            className="mb-19 ml-0 block text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            Do you have pets?
+            <input
+              id="pet-checkbox"
+              type="checkbox"
+              checked={pet}
+              onChange={() => setPet(!pet)}
+              className="relative ml-2 h-10 w-10 rounded border-gray-300 bg-gray-100 align-middle text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+            />
+          </label>
+        </div>
         {numberOfNights > 0 && (
           <button
             className="mx-auto mt-5 w-40 rounded-md border border-transparent bg-green-500 px-4 py-3 text-base font-medium text-white shadow-sm  sm:px-8"
             type="button"
-            onClick={async () => {
-              console.log("click");
-              try {
-                const res = await fetch("/api/stripe/session", {
-                  body: JSON.stringify({
-                    from,
-                    to,
-                  }),
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  method: "POST",
-                });
-
-                const data = await res.json();
-                const { sessionId } = data;
-                const { stripePublicKey } = data;
-                // update to code required
-                // @ts-ignore
-                // eslint-disable-next-line no-undef
-                const stripe = Stripe(stripePublicKey);
-                const { error } = await stripe.redirectToCheckout({
-                  sessionId,
-                });
-
-                if (error) {
-                  console.log("error", error);
-                }
-              } catch (error) {
-                console.log("error", error);
-              }
-            }}
+            onClick={handleBookingClick}
           >
             Book Now
           </button>
-        )}{" "}
+        )}
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  let bookedDates = await getBookedDates(prisma);
+  bookedDates = JSON.parse(JSON.stringify(bookedDates));
+
+  return {
+    props: {
+      bookedDates,
+    },
+  };
 }

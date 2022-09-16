@@ -1,18 +1,19 @@
+/* eslint-disable no-unreachable-loop */
 /* eslint-disable no-restricted-syntax */
-import config from "./config";
+import { getDatesBetweenDates } from "./dates";
 
-export const getBookedDates = () => {
+export const getBookedDates = async (prisma) => {
   const bookedDates = [];
 
-  if (config.booked) {
-    for (const [yearKey, yearValue] of Object.entries(config.booked)) {
-      for (const [monthKey, monthValue] of Object.entries(yearValue)) {
-        for (const day of monthValue) {
-          bookedDates.push(
-            new Date(Number(yearKey), Number(monthKey) - 1, day)
-          );
-        }
-      }
+  const bookings = await prisma.booking.findMany();
+
+  for (const booking of bookings) {
+    const dates = getDatesBetweenDates(booking.from, booking.to);
+
+    bookedDates.push(booking.from);
+
+    for (const bookedDay of dates) {
+      bookedDates.push(bookedDay);
     }
   }
 

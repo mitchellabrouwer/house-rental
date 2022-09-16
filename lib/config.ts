@@ -16,5 +16,4 @@ export default {
   },
 
   blocked: { 2022: { 9: [20, 21, 22] } }, // block these days in August
-  booked: { 2022: { 9: [17, 24, 25] } },
 };

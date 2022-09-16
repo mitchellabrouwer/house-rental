@@ -38,6 +38,8 @@ export default async (req, res) => {
       sessionId: stripeSession.id,
       from: req.body.from,
       to: req.body.to,
+      pet: req.body.pet,
+      guests: req.body.guests,
     },
   });
 

@@ -18,16 +18,10 @@ export const isBlocked = (date) => {
   return false;
 };
 
-export const isBooked = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-
-  if (config.booked[year]) {
-    if (config.booked[year][month]) {
-      if (config.booked[year][month].findIndex((el) => el === day) !== -1) {
-        return true;
-      }
+export const isBooked = (day, bookedDates) => {
+  for (const bookedDate of bookedDates) {
+    if (new Date(bookedDate).toDateString() === day.toDateString()) {
+      return true;
     }
   }
 
@@ -55,13 +49,13 @@ export const numberOfNightsBetweenDates = (startDate, endDate) => {
   return dayCount;
 };
 
-export const isDaySelectable = (day) => {
+export const isDaySelectable = (day, bookedDates) => {
   if (!day) return true; // this means we're unselecting a day, return true to allow
 
   return (
     !isPast(day) &&
     !isBlocked(day) &&
-    !isBooked(day) &&
+    !isBooked(day, bookedDates) &&
     numberOfNightsBetweenDates(new Date(), day) <= 30 * 6
   );
 };

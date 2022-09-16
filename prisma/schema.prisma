@@ -65,6 +65,8 @@ model Booking {
   from      DateTime
   to        DateTime
   price     Decimal?
+  pet       Boolean  @default(false)
+  guests    Int
   email     String? //needed for Stripe
   sessionId String? //needed for Stripe
   paid      Boolean  @default(false)

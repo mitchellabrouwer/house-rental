@@ -14,7 +14,7 @@ import {
   getBlockedDates,
   getDatesBetweenDates,
   isDaySelectable,
-  numberOfNightsBetweenDates
+  numberOfNightsBetweenDates,
 } from "../lib/dates";
 
 export default function Calendar() {
@@ -181,7 +181,7 @@ export default function Calendar() {
                     to,
                   }),
                   headers: {
-            test@gmail.com        "Content-Type": "application/json",
+                    "Content-Type": "application/json",
                   },
                   method: "POST",
                 });

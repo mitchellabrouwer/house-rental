@@ -1,4 +1,5 @@
 import getRawBody from "raw-body";
+import sendEmail from "../../../lib/email";
 import prisma from "../../../lib/prisma";
 import { stripe } from "./stripe";
 
@@ -62,6 +63,24 @@ export default async (req, res) => {
           sessionId,
         },
       });
+
+      sendEmail(
+        "you@youremail.com",
+        "New booking",
+        `${email} booked from ${new Date(
+          booking.from
+        ).toDateString()} to ${new Date(booking.to).toDateString()}`
+      );
+
+      sendEmail(
+        email,
+        "Thanks for booking",
+        `Your booking from ${new Date(
+          booking.from
+        ).toDateString()} to ${new Date(
+          booking.to
+        ).toDateString()} is confirmed!`
+      );
     } catch (err) {
       console.error(err);
     }

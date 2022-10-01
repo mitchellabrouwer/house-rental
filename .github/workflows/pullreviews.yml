@@ -5,7 +5,8 @@
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron: "36 17 * * *"
+    # prettier-ignore
+    - cron: '36 17 * * *'
     - workflow_dispatch:
 
 job:

@@ -9,7 +9,7 @@ on:
     - cron: '36 17 * * *'
   workflow_dispatch:
 
-job:
+jobs:
   my-job:
     runs-on: ubuntu-latest
     steps:

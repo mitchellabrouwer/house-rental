@@ -31,5 +31,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: npm install nodemailer pg
-      - run: node services/email/src/index.js
+      - run: npm install
+        working-directory: ./services/email/
+      - run: node src/index.js
+        working-directory: ./services/email/

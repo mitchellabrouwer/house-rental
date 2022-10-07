@@ -26,7 +26,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: cd services
-      - run: cd email
+      - run: cd services/email
       - run: npm install
       - run: node src/index.js

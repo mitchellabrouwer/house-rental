@@ -5,11 +5,11 @@ on:
     - cron: "0 14 * * *"
   workflow_dispatch:
 
-env:
-  EMAIL_SERVER_PORT: ${{ secrets.EMAIL_SERVER_PORT }}
-  EMAIL_SERVER_HOST: ${{ secrets.EMAIL_SERVER_HOST }}
-  EMAIL_SERVER_USER: ${{ secrets.EMAIL_SERVER_USER }}
-  EMAIL_SERVER_PASSWORD: ${{ secrets.EMAIL_SERVER_PASSWORD }}
+# env:
+#   EMAIL_SERVER_PORT: ${{ secrets.EMAIL_SERVER_PORT }}
+#   EMAIL_SERVER_HOST: ${{ secrets.EMAIL_SERVER_HOST }}
+#   EMAIL_SERVER_USER: ${{ secrets.EMAIL_SERVER_USER }}
+#   EMAIL_SERVER_PASSWORD: ${{ secrets.EMAIL_SERVER_PASSWORD }}
 
 jobs:
   review:
@@ -26,5 +26,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+      - run:
       - run: npm install
       - run: node src/index.js

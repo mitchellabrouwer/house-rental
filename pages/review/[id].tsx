@@ -75,6 +75,7 @@ export default function Review() {
             const data = await res.json();
 
             console.log("data", data);
+            router.push("/");
           }}
         >
           Leave review

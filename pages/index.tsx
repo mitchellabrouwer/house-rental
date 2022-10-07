@@ -3,24 +3,27 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import Link from "next/link";
+import { getReviews } from "../lib/data";
+import prisma from "../lib/prisma";
+import timeago from "../lib/timeago";
 
-const reviews = [
-  {
-    text: `We absolutely loved to stay at Ivana's place. She's an extremely welcoming host and takes care of every detail - clear communication, a spotless and well-equipped apartment, a home-made cake to welcome the guests and much more! We could not have had a better time in Valtellina and will surely stay with Ivana again on our next visit to Morbegno. Highly recommended!`,
-    author: "Stefan",
-    date: "Nov 2021",
-  },
-  {
-    text: `Ivana was a very caring and sweet host. The hospitality goes beyond imagination. She welcomed us with a fabulous cake, a couple of beers, sodas, milk, butter and a bottle of local red wine. The place is highly recommended.`,
-    author: "Tomáš",
-    date: "Oct 2021",
-  },
-  {
-    text: `Fantastic accommodation, highly recommended for a quiet stay surrounded by stunning views with plenty of active options for walking and cycling. Ivana is a wonderful host!`,
-    author: "Ross",
-    date: "Oct 2021",
-  },
-];
+// const reviews = [
+//   {
+//     text: `We absolutely loved to stay at Ivana's place. She's an extremely welcoming host and takes care of every detail - clear communication, a spotless and well-equipped apartment, a home-made cake to welcome the guests and much more! We could not have had a better time in Valtellina and will surely stay with Ivana again on our next visit to Morbegno. Highly recommended!`,
+//     author: "Stefan",
+//     date: "Nov 2021",
+//   },
+//   {
+//     text: `Ivana was a very caring and sweet host. The hospitality goes beyond imagination. She welcomed us with a fabulous cake, a couple of beers, sodas, milk, butter and a bottle of local red wine. The place is highly recommended.`,
+//     author: "Tomáš",
+//     date: "Oct 2021",
+//   },
+//   {
+//     text: `Fantastic accommodation, highly recommended for a quiet stay surrounded by stunning views with plenty of active options for walking and cycling. Ivana is a wonderful host!`,
+//     author: "Ross",
+//     date: "Oct 2021",
+//   },
+// ];
 
 const destinations = [
   {
@@ -57,7 +60,8 @@ const destinations = [
   },
 ];
 
-export default function Home() {
+export default function Home({ reviews }) {
+  console.log("reviewsHome", reviews);
   return (
     <div>
       <Head>
@@ -164,9 +168,9 @@ export default function Home() {
           <div className="mt-10">
             {reviews.map((review, index) => (
               <div className="mb-5" key={index}>
-                <div>{review.text}</div>
+                <div>{review.comment}</div>
                 <div className="mt-2 text-gray-300">
-                  {review.author}, {review.date}
+                  {review.name}, {timeago.format(new Date(review.booking.to))}
                 </div>
               </div>
             ))}
@@ -208,4 +212,17 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  let reviews = await getReviews(prisma);
+  reviews = JSON.parse(JSON.stringify(reviews));
+
+  console.log("reviews12", reviews);
+
+  return {
+    props: {
+      reviews,
+    },
+  };
 }

@@ -29,5 +29,6 @@ export default async (req, res) => {
     });
     return res.json({ review: true });
   }
+
   return res.status(405).end();
 };

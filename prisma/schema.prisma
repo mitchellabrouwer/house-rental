@@ -71,4 +71,15 @@ model Booking {
   sessionId String? //needed for Stripe
   paid      Boolean  @default(false)
   createdAt DateTime @default(now())
+  review    Review[]
+}
+
+model Review {
+  id      String @id @default(cuid())
+  rating  Int
+  comment String
+  name    String
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }

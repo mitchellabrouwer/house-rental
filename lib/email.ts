@@ -14,7 +14,7 @@ export default function sendEmail(to, subject, body) {
 
   transporter.sendMail(
     {
-      from: process.env.FEMALE_FROM,
+      from: process.env.EMAIL_FROM,
       to,
       subject,
       html: body,

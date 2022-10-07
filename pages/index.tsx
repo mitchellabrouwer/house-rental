@@ -214,7 +214,7 @@ export default function Home({ reviews }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   let reviews = await getReviews(prisma);
   reviews = JSON.parse(JSON.stringify(reviews));
 

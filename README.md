@@ -25,16 +25,13 @@ A rental website for your own holiday house allowing the owner to set rates and 
 - [x] Store in postgres database
 - [x] Confirmation Emails
 - [x] Email to prompt review sent via GitHub actions
+- [ ] Seed database
 - [ ] Dashboard of bookings and earnings
 
 ## Roadmap
 
-- [ ] Add Changelog
-- [ ] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+- [ ] Add user logins
+- [ ] Add authorization
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

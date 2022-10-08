@@ -15,16 +15,16 @@ A rental website for your own holiday house allowing the owner to set rates and 
 
 ## Features
 
-- [x] Dynamic calendar
-- [x] Customise pricing
-- [x] Calculate cost of stay
-- [x] Store in postgres databased
-- [x] Stripe payments
-- [x] Confirmation Emails
-- [x] Discounts for week or monthly stays
-- [x] Email to prompt review sent via GitHub actions
-- [x] Service fee at the end of the stay
 - [x] Number of guests and if have pets
+- [x] Dynamic calendar
+- [x] Ability to customise pricing
+- [x] Calculate cost of stay
+- [x] Service fee at the end of the stay
+- [x] Discounts for week or monthly stays
+- [x] Stripe payments
+- [x] Store in postgres database
+- [x] Confirmation Emails
+- [x] Email to prompt review sent via GitHub actions
 - [ ] Dashboard of bookings and earnings
 
 ## Roadmap

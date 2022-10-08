@@ -85,14 +85,15 @@ export const addDayToRange = (day, range = { from: null, to: null }) => {
       from = day;
     }
   }
+  console.log({ from, to });
 
   return { from, to };
 };
 
 export const getDatesBetweenDates = (startDate, endDate) => {
   let dates = [];
-  const theDate = new Date(startDate); // to avoid modifying the original date we clone it
-  theDate.setDate(theDate.getDate() + 1); // we exclude the first date
+  const theDate = new Date(startDate); // to avoid modifying the original date clone it
+  theDate.setDate(theDate.getDate() + 1); // exclude the first date
   while (theDate < endDate) {
     dates = [...dates, new Date(theDate)];
     theDate.setDate(theDate.getDate() + 1);

@@ -66,7 +66,6 @@ function sendEmail(to, subject, body) {
 (async function run() {
   const bookings = await getUsersThatCheckedOut();
 
-  console.log("bookings", bookings);
   bookings.forEach((booking) => {
     sendEmail(
       booking.email,

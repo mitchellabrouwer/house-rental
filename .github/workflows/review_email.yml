@@ -32,6 +32,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm install
-        working-directory: ./services/email/
+        working-directory: ./app/services/email/
       - run: node src/index.js
-        working-directory: ./services/email/
+        working-directory: ./app/services/email/

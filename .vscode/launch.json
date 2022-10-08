@@ -2,22 +2,35 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Email workflow action",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/services/email/src/index.js"
+    },
+    {
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
-      "command": "npm run dev"
+      "command": "cd app && npm run dev",
+      "localRoot": "${workspaceFolder}/app",
+      "remoteRoot": "${workspaceFolder}/app",
+      "sourceMaps": true
     },
     {
       "name": "Next.js: debug client-side",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+      "sourceMaps": true
     },
     {
       "name": "Next.js: debug full stack",
       "type": "node-terminal",
       "request": "launch",
-      "command": "npm run dev",
+      "command": "cd app && npm run dev",
+      "remoteRoot": "${workspaceFolder}/app",
+      "localRoot": "${workspaceFolder}/app",
+      "sourceMaps": true,
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",

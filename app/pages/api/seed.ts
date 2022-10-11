@@ -10,14 +10,15 @@ export default async function handler(req, res) {
 
   if (req.body.task === "add_fake_bookings") {
     let date = new Date();
-
+    // eslint-disable-next-line no-debugger
     let bookings = 0;
-    while (bookings < 10) {
+
+    debugger;
+    while (bookings < 200) {
       const startDate = date;
       const numberOfDaysStayed = faker.datatype.number({ min: 2, max: 10 });
-      let endDate = new Date();
-      endDate = new Date(
-        endDate.setDate(endDate.getDate() + numberOfDaysStayed)
+      const endDate = new Date(
+        startDate.setDate(startDate.getDate() + numberOfDaysStayed)
       );
       date = new Date(endDate);
 
@@ -36,15 +37,25 @@ export default async function handler(req, res) {
     }
   }
 
-  if (req.body.task === "add fake reviews") {
+  console.log("req.body.task", req.body.task);
+  if (req.body.task === "add_fake_reviews") {
+    const bookings = await prisma.booking.findMany();
+
+    const getRandomBooking = () => {
+      const randomIndex = Math.floor(Math.random() * bookings.length);
+      return bookings[randomIndex];
+    };
+
     let count = 0;
-    while (count < 10) {
-      // await prisma.review.create({
-      //   data: {
-      //     name: faker.word.noun().toLowerCase(),
-      //     // description: faker.lorem.paragraph(1).toLowerCase(),
-      //   },
-      // });
+    while (count < 100) {
+      await prisma.review.create({
+        data: {
+          rating: faker.datatype.number({ min: 1, max: 5 }),
+          comment: faker.lorem.paragraph(),
+          name: faker.name.firstName(),
+          booking: { connect: { id: getRandomBooking().id } },
+        },
+      });
       count += 1;
     }
   }

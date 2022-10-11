@@ -26,16 +26,16 @@ export default function Seed() {
   const tasks = [
     {
       task: "add_fake_bookings",
-      description: "Add fake bookings",
+      description: "add fake bookings",
     },
     {
-      task: "add_reviews",
-      description: "Add fake reviews",
+      task: "add_fake_reviews",
+      description: "add fake reviews",
     },
 
     {
       task: "clean_database",
-      description: "Clean the database",
+      description: "clean the database",
     },
   ];
 

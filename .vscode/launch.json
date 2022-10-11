@@ -11,30 +11,34 @@
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
-      "command": "cd app && npm run dev",
-      "localRoot": "${workspaceFolder}/app",
-      "remoteRoot": "${workspaceFolder}/app",
-      "sourceMaps": true
+      "command": "cd app && npm run dev"
     },
     {
       "name": "Next.js: debug client-side",
-      "type": "chrome",
+      "type": "pwa-chrome",
       "request": "launch",
-      "url": "http://localhost:3000",
-      "sourceMaps": true
+      "url": "http://localhost:3000"
     },
     {
       "name": "Next.js: debug full stack",
       "type": "node-terminal",
       "request": "launch",
       "command": "cd app && npm run dev",
-      "remoteRoot": "${workspaceFolder}/app",
-      "localRoot": "${workspaceFolder}/app",
-      "sourceMaps": true,
+      "console": "integratedTerminal",
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",
         "action": "debugWithChrome"
+      }
+    }
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Launch Program",
+      "skipFiles": ["<node_internals>/**"],
+      "port": 9229,
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${workspaceRoot}/app/*"
       }
     }
   ]

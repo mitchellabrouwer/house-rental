@@ -15,6 +15,7 @@
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.4",
     "@prisma/client": "^4.1.1",
+    "d3": "^7.6.1",
     "javascript-time-ago": "^2.5.6",
     "jest": "^29.0.3",
     "next": "12.2.2",
@@ -29,6 +30,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/d3": "^7.4.0",
     "@types/node": "^18.0.6",
     "@types/pg": "^8.6.5",
     "@types/react": "^18.0.15",

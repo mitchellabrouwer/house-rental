@@ -30,3 +30,36 @@ a {
 * {
   box-sizing: border-box;
 }
+
+#tooltip {
+  position: absolute;
+  width: 80px;
+  opacity: 60%;
+  height: auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  color: black;
+  z-index: 99;
+  left: 0;
+  top: 0;
+}
+
+#tooltip.hidden {
+  display: none;
+}
+
+#tooltip > p {
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+}
+
+.svg-bar {
+  fill: navy;
+}
+.svg-highlight {
+  fill: palevioletred;
+}

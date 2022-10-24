@@ -1,97 +1,74 @@
 import {
   axisBottom,
   axisLeft,
-  extent,
   format,
   max,
-  pointer,
   scaleBand,
   scaleLinear,
   select,
-  ticks,
+  timeFormat,
 } from "d3";
 import { useD3 } from "../hooks/useD3";
-
 const height = 500;
 const width = 500;
-const gap = 6;
-function Chart({ data }) {
+
+function Chart({ title, data }) {
   const ref = useD3(
     (svg) => {
       const margin = { top: 20, right: 30, bottom: 30, left: 40 };
+      const xTicks = 5;
+      const yTicks = 5;
+      const formatTime = timeFormat("%b %y");
+      const tickDistance = Math.round(data.length / xTicks);
+      const barColour = "#3E505B";
+      const hoverColour = "#A2B6C3";
 
       const x = scaleBand()
         .domain(data.map((d) => d.label))
         .rangeRound([margin.left, width - margin.right])
-        .padding(0.1);
+        .padding(0.2);
 
       const y = scaleLinear()
-        // @ts-ignore, couldnt get ts to pick up types
+        // @ts-ignore, couldnt get ts to pick up types for max
         .domain([0, max(data, (d) => d.value)])
         .rangeRound([height - margin.bottom, margin.top]);
 
-      // const xAxis = (g) =>
-      // g.attr("transform", `translate(0,${height - margin.bottom})`).call(
-      //   d3
-      //     .axisBottom(x)
-      //     .tickValues(
-      //       d3
-      //         .ticks(...d3.extent(x.domain()), width / 40)
-      //         .filter((v) => x(v) !== undefined)
-      //     )
-      //     .tickSizeOuter(0)
-      // );
-
-      // const yAxis = (g) =>
-      //   g
-      //     .attr("transform", `translate(${margin.left},0)`)
-      //     .style("color", "steelblue")
-      //     .call(d3.axisLeft(y1).ticks(null, "s"))
-      //     .call((g) => g.select(".domain").remove())
-      //     .call((g) =>
-      //       g
-      //         .append("text")
-      //         .attr("x", -margin.left)
-      //         .attr("y", 10)
-      //         .attr("fill", "currentColor")
-      //         .attr("text-anchor", "start")
-      //         .text(data.y1)
-      //     );
-
-      // svg.select(".x-axis").call(xAxis);
-      // svg.select(".y-axis").call(yAxis);
       svg
         .append("g")
         .attr("transform", `translate(${margin.left},0)`)
-        .call(axisLeft(y).ticks(null, "s"));
+        .call(
+          axisLeft(y).ticks(yTicks).tickFormat(format(".1s")).tickSizeOuter(0)
+        );
 
       svg
         .append("g")
         .attr("transform", `translate(0,${height - margin.bottom})`)
         .call(
-          axisBottom(x).tickValues(
-            ticks(...extent(x.domain()), width / 40).filter(
-              (v) => x(v) !== undefined
+          axisBottom(x)
+            .tickValues(
+              data
+                .map((d, i) => i % tickDistance === 0 && d.label)
+                .filter((item) => item)
             )
-          )
-          // .tickSizeOuter(0)
+            .tickFormat((d) => formatTime(new Date(d)))
+            .tickSizeOuter(0)
         );
 
       const onMouseOver = (event, d) => {
-        const [x, y] = pointer(event);
-        select(event.currentTarget).style("fill", "red");
+        // const [x, y] = pointer(event);
+        select(event.currentTarget).style("fill", hoverColour);
 
         select("#tooltip")
           .classed("hidden", false)
           .style("left", event.pageX + 10 + "px")
           .style("top", event.pageY - 10 + "px");
 
-        select("#tooltip-label").text(`${d.label}`);
+        select("#tooltip-label").text(`${formatTime(new Date(d.label))}`);
         select("#tooltip-value").text(`${format("~s")(d.value)}`);
       };
 
       const onMouseOut = (event, d) => {
-        select(event.currentTarget).style("fill", "steelblue");
+        select(event.currentTarget).style("fill", barColour);
         select("#tooltip").classed("hidden", true);
       };
 
@@ -103,13 +80,13 @@ function Chart({ data }) {
 
       svg
         .select(".plot-area")
-        .attr("fill", "steelblue")
+        .attr("fill", barColour)
         .selectAll(".bar")
         .data(data)
         .join("rect")
         .attr("class", "bar")
         .attr("x", (d) => x(d.label))
-        .attr("width", x.bandwidth() - gap / 2)
+        .attr("width", x.bandwidth())
         .attr("y", (d) => y(d.value))
         .attr("height", (d) => y(0) - y(d.value))
         .on("mousemove", onMouseMove)
@@ -121,6 +98,9 @@ function Chart({ data }) {
 
   return (
     <>
+      <h2 className="mt-0 mb-2 text-center text-2xl font-medium leading-tight text-white">
+        {title}
+      </h2>
       <svg
         ref={ref}
         viewBox={`0 0 ${height} ${width}`}

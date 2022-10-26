@@ -61,7 +61,6 @@ const destinations = [
 ];
 
 export default function Home({ reviews }) {
-  console.log("reviewsHome", reviews);
   return (
     <div>
       <Head>
@@ -217,8 +216,6 @@ export default function Home({ reviews }) {
 export async function getServerSideProps() {
   let reviews = await getReviews(prisma);
   reviews = JSON.parse(JSON.stringify(reviews));
-
-  console.log("reviews12", reviews);
 
   return {
     props: {

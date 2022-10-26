@@ -3,7 +3,6 @@ import prisma from "../../../lib/prisma";
 import { stripe } from "./stripe";
 
 export default async (req, res) => {
-  console.log("made it here");
   if (req.method !== "POST") {
     return res.status(405).end();
   }

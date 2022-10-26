@@ -9,7 +9,6 @@ export default function Review() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
 
-  console.log("rating", rating);
   return (
     <div className="flex h-screen items-center justify-center ">
       <form className=" spacing flex flex-col gap-3 rounded-md border border-white p-10">
@@ -54,8 +53,6 @@ export default function Review() {
           type="button"
           className="mt-5 rounded-md border px-2 py-1"
           onClick={async (e) => {
-            console.log("clicked");
-
             e.preventDefault();
 
             const res = await fetch("/api/review", {
@@ -74,7 +71,6 @@ export default function Review() {
 
             const data = await res.json();
 
-            console.log("data", data);
             router.push("/");
           }}
         >

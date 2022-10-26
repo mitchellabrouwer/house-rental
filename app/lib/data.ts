@@ -7,6 +7,5 @@ export const getReviews = async (prisma: PrismaClient) => {
     },
   });
 
-  console.log("reviews", reviews);
   return reviews;
 };

@@ -4,27 +4,7 @@ const { Pool } = postgresql;
 
 let pool;
 
-if (typeof module === "object" && typeof module.exports === "object") {
-  console.log("node");
-}
-
-if (typeof window !== "undefined" && typeof window.document !== "undefined") {
-  console.log("browser");
-}
-
 if (!global.pool) {
-  // const connection = {
-  //   pool,
-  //   query: (...args) => {
-  //     return pool.connect().then((pool) => {
-  //       return pool.query(...args).then((res) => {
-  //         pool.release();
-  //         return res.rows;
-  //       });
-  //     });
-  //   },
-  // };
-
   global.pool = new Pool({
     user: process.env.PGUSER,
     host: process.env.PGHOST,
@@ -35,11 +15,5 @@ if (!global.pool) {
 }
 
 pool = global.pool;
-
-// if (callback) {
-//   callback(connection);
-// }
-
-// return connection;
 
 export default pool;

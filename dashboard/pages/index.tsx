@@ -56,7 +56,6 @@ export async function getServerSideProps(context) {
       WHERE paid=true`;
 
     const bookingRes = await client.query(bookingStats);
-    console.log(bookingRes.rows[0]);
     bookings = JSON.parse(JSON.stringify(bookingRes.rows[0]));
 
     const reviewStats = Prisma.sql`

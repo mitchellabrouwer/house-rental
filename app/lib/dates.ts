@@ -85,7 +85,6 @@ export const addDayToRange = (day, range = { from: null, to: null }) => {
       from = day;
     }
   }
-  console.log({ from, to });
 
   return { from, to };
 };

@@ -51,8 +51,6 @@ export default async (req, res) => {
         },
       });
 
-      console.log("booking", booking);
-
       await prisma.booking.updateMany({
         data: {
           paid: true,

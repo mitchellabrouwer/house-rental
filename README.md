@@ -2,7 +2,7 @@
 
 # Rental house online bookings
 
-A rental website for your own holiday house allowing the owner to set rates and have bookings made directly online.
+A holiday house rental website. Allows the owner to set rates and make bookings directly online.
 
 ## Built With
 
@@ -25,8 +25,8 @@ A rental website for your own holiday house allowing the owner to set rates and 
 - [x] Store in postgres database
 - [x] Confirmation Emails
 - [x] Email to prompt review sent via GitHub actions
-- [ ] Seed database
-- [ ] Dashboard of bookings and earnings
+- [x] Seed database
+- [x] Dashboard of bookings and earnings using d3
 
 ## Roadmap
 
@@ -37,27 +37,9 @@ A rental website for your own holiday house allowing the owner to set rates and 
 
 ---
 
-## Contributing
-
-_If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement"._
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a pull request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Acknowledgments
 
 This project was build as part of a 2022 Nextjs Bootcamp hosted by [Flavio Copes](https://github.com/flaviocopes)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## License
-
-Distributed under the MIT License. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

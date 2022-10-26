@@ -14,8 +14,6 @@ async function getUsersThatCheckedOut() {
     port: process.env.PGPORT,
   });
 
-  console.log(Date.now());
-
   await client.connect();
   const res = await client.query(
     `SELECT "email", "id" FROM "Booking" WHERE "to"='2022-09-28 14:00:00' AND "paid"=true`
@@ -45,7 +43,6 @@ function sendEmail(to, subject, body) {
     },
   });
 
-  console.log("to", to);
   transporter.sendMail(
     {
       from: process.env.EMAIL_FROM,

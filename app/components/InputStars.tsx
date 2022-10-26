@@ -22,9 +22,6 @@ export const InputStars: React.FC<InputStarsProps> = ({
   const [stars, setStars] = useState(initialStars);
   const [hover, setHover] = useState([false, false, false, false, false]);
 
-  console.log(initialStars);
-  console.log(stars);
-
   useEffect(() => {
     setRating(stars.filter(Boolean).length);
   }, [stars]);
@@ -42,7 +39,6 @@ export const InputStars: React.FC<InputStarsProps> = ({
   const onStarClick = async (event: MouseEvent<HTMLButtonElement>) => {
     const value = Number(event.currentTarget.value) - 1;
     setStars(stars.map((_, i) => i <= value));
-    // setRating(stars.filter(Boolean).length);
   };
 
   return (

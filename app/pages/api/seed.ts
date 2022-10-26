@@ -37,7 +37,6 @@ export default async function handler(req, res) {
     }
   }
 
-  console.log("req.body.task", req.body.task);
   if (req.body.task === "add_fake_reviews") {
     const bookings = await prisma.booking.findMany();
 
